@@ -4,6 +4,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\SuperAdminMiddleware;
+use App\Http\Middleware\CheckAgencySubdomain;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -14,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'super_admin' => SuperAdminMiddleware::class,
+            'check.agency' => CheckAgencySubdomain::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

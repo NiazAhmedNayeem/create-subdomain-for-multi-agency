@@ -24,84 +24,45 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware(['auth','super_admin'])->prefix('admin')->group(function () {
+Route::middleware(['auth', 'super_admin'])->prefix('admin')->group(function () {
 
     Route::get('/dashboard', function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
 
-
-
-
-
-
-
-
-
     ///Agency Management
-    Route::get('/agencies', [AgencyController::class,'index'])->name('admin.agencies');
+    Route::get('/agencies', [AgencyController::class, 'index'])->name('admin.agencies');
     Route::get('/agencies/create', [AgencyController::class, 'create'])->name('admin.agencies.create');
-    Route::post('/agencies/store', [AgencyController::class,'store'])->name('admin.agencies.store');
-    Route::get('admin/agencies/{agency}/edit', [AgencyController::class,'edit'])->name('admin.agencies.edit');
-    Route::put('admin/agencies/{agency}', [AgencyController::class,'update'])->name('admin.agencies.update');
-    Route::delete('admin/agencies/{agency}', [AgencyController::class,'destroy'])->name('admin.agencies.destroy');
+    Route::post('/agencies/store', [AgencyController::class, 'store'])->name('admin.agencies.store');
+    Route::get('admin/agencies/{agency}/edit', [AgencyController::class, 'edit'])->name('admin.agencies.edit');
+    Route::put('admin/agencies/{agency}', [AgencyController::class, 'update'])->name('admin.agencies.update');
+    Route::delete('admin/agencies/{agency}', [AgencyController::class, 'destroy'])->name('admin.agencies.destroy');
 
 
+    Route::get('/agencies/check-subdomain', function (\Illuminate\Http\Request $request) {
+        $subdomain = strtolower($request->query('subdomain'));
+        $excludeId = $request->query('exclude_id');
 
+        $exists = \App\Models\Agency::where('subdomain', $subdomain)
+            ->when($excludeId, fn($q) => $q->where('id', '!=', $excludeId))
+            ->exists();
 
-
-
-
-
-
-
-
-
-
-
-    // Route::post('/admin/agencies/store', function (Request $request) {
-
-    //     $subdomain = strtolower(str_replace(' ', '', $request->name));
-
-    //     $tenant = Tenant::create([
-    //         'id' => $subdomain,
-    //     ]);
-    //     Domain::create([
-    //         'domain' => $subdomain . '.lvh.me',
-    //         'tenant_id' => $tenant->id,
-    //     ]);
-
-    //     Artisan::call('tenants:migrate', [
-    //         '--tenants' => [$tenant->id],
-    //     ]);
-
-    //     tenancy()->initialize($tenant);
-
-    //     User::create([
-    //         'name' => $request->name . ' Admin',
-    //         'email' => $request->admin_email,
-    //         'password' => bcrypt($request->admin_password),
-    //         'role' => 'admin',
-    //     ]);
-
-    //     tenancy()->end(); // End tenant context
-
-    //     return redirect()->route('admin.agencies')
-    //         ->with('success', 'Agency Created Successfully with Admin!');
-    // })->name('admin.agencies.store');
-
-
-
-
-
-
-
-
-
-
-
+        return response()->json([
+            'available' => !$exists
+        ]);
+    });
 });
 
+
+Route::middleware(['auth', 'check.agency'])->prefix('agency')->group(function () {
+
+    Route::get('/dashboard', function () {
+
+        $agency = request()->attributes->get('agency');
+
+        return view('agency.dashboard', compact('agency'));
+    })->name('agency.dashboard');
+});
 
 
 

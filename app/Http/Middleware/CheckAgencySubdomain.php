@@ -16,12 +16,26 @@ class CheckAgencySubdomain
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $subdomain = explode('.', $request->getHost())[0]; // niaz.saas.local
-        $agency = Agency::where('subdomain', $subdomain)->first();
+        $host = $request->getHost();
+        // example: java.lvh.me
 
-        if (!$agency) abort(404, "Agency not found");
+        $parts = explode('.', $host);
+        $subdomain = $parts[0];
 
-        $request->merge(['current_agency' => $agency]);
+        $agency = \App\Models\Agency::where('subdomain', $subdomain)->first();
+
+        if (!$agency) {
+            abort(404, 'Agency not found');
+        }
+
+        if (auth()->check()) {
+            if (auth()->user()->agency_id !== $agency->id) {
+                abort(403, 'Unauthorized access to this agency');
+            }
+        }
+
+        // attach agency
+        $request->attributes->set('agency', $agency);
 
         return $next($request);
     }

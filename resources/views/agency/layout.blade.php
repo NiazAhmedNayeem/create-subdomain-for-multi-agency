@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Super Admin Panel</title>
+    <title>Agency Dashboard</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
@@ -14,22 +14,38 @@
         <!-- Sidebar -->
         <aside class="w-64 bg-gray-900 text-white flex flex-col justify-between">
             <div class="p-6">
-                <!-- Title -->
-                <h2 class="text-2xl font-bold mb-10">Super Admin</h2>
+                <!-- Agency Name -->
+                <h2 class="text-2xl font-bold mb-10">
+                    {{ request()->attributes->get('agency')->name ?? 'Agency' }}
+                </h2>
 
                 <!-- Menu -->
                 <nav>
                     <ul class="space-y-4">
                         <li>
-                            <a href="{{ route('admin.dashboard') }}"
+                            <a href="{{ route('agency.dashboard') }}"
                                 class="block px-4 py-2 rounded hover:bg-gray-700 transition">
                                 Dashboard
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('admin.agencies') }}"
-                                class="block px-4 py-2 rounded hover:bg-gray-700 transition">
-                                Agencies
+                            <a href="#" class="block px-4 py-2 rounded hover:bg-gray-700 transition">
+                                Staff
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="block px-4 py-2 rounded hover:bg-gray-700 transition">
+                                Clients
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="block px-4 py-2 rounded hover:bg-gray-700 transition">
+                                Candidate
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="block px-4 py-2 rounded hover:bg-gray-700 transition">
+                                Revenue
                             </a>
                         </li>
                     </ul>
@@ -48,7 +64,7 @@
             </div>
         </aside>
 
-        <!-- Content Area -->
+        <!-- Main Content -->
         <main class="flex-1 p-10 overflow-y-auto">
             @yield('content')
         </main>
