@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Stancl\Tenancy\Database\Models\Tenant;
+use Stancl\Tenancy\Database\Models\Domain;
+use Illuminate\Http\Request;
 
 Route::get('/', function () {
     return view('welcome');
@@ -26,7 +29,35 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/agencies', function () {
         return view('admin.agencies');
     })->name('admin.agencies');
+
+
+    Route::get('/agencies/create', function () {
+        return view('admin.create-agency');
+    })->name('admin.agencies.create');
+
+    Route::post('/agencies/store', function (Request $request) {
+
+        $subdomain = strtolower(str_replace(' ', '', $request->name));
+
+        $tenant = Tenant::create([
+            'id' => $subdomain,
+        ]);
+
+        Domain::create([
+            'domain' => $subdomain . '.lvh.me',
+            'tenant_id' => $tenant->id,
+        ]);
+
+        \Artisan::call('tenants:migrate', [
+            '--tenants' => [$tenant->id],
+        ]);
+
+        return redirect()->route('admin.agencies')
+            ->with('success', 'Agency Created Successfully');
+    })->name('admin.agencies.store');
 });
+
+
 
 
 
