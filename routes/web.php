@@ -24,7 +24,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware(['auth'])->prefix('admin')->group(function () {
+Route::middleware(['auth','super_admin'])->prefix('admin')->group(function () {
 
     Route::get('/dashboard', function () {
         return view('admin.dashboard');
@@ -38,7 +38,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
 
 
-
+    ///Agency Management
     Route::get('/agencies', [AgencyController::class,'index'])->name('admin.agencies');
     Route::get('/agencies/create', [AgencyController::class, 'create'])->name('admin.agencies.create');
     Route::post('/agencies/store', [AgencyController::class,'store'])->name('admin.agencies.store');
