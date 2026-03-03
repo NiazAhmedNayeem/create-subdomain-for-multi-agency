@@ -60,7 +60,7 @@
 
             <!-- Logout Button -->
             <div class="p-6">
-                <form method="POST" action="{{ route('logout') }}">
+                <form method="POST" action="{{ route('agency.logout', ['subdomain' => request()->route('subdomain')]) }}">
                     @csrf
                     <button type="submit"
                         class="w-full bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded transition">

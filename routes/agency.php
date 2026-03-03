@@ -14,7 +14,7 @@ Route::domain('{subdomain}.lvh.me')->middleware(['identify.agency'])->group(func
 
     Route::get('login', [AgencyAuthController::class, 'showLogin'])->name('agency.login');
     Route::post('login', [AgencyAuthController::class, 'login'])->name('agency.login.store');
-
+    Route::post('logout', [AgencyAuthController::class, 'logout'])->name('agency.logout')->middleware('auth');
 
     Route::middleware(['auth', 'role:agency_admin'])->prefix('agency')->group(function () {
 

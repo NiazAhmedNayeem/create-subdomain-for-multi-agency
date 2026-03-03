@@ -95,4 +95,15 @@ class AgencyAuthController extends Controller
 
         return redirect()->back()->with('success', 'Candidate registered successfully!');
     }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('agency.login', ['subdomain' => request('subdomain')])
+            ->with('success', 'Logged out successfully.');
+    }
 }
