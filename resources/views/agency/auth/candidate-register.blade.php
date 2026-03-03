@@ -86,7 +86,7 @@
 
             <p class="text-center mt-4">
                 Already have an account? <a
-                    href="{{ route('candidate.login', ['subdomain' => app('currentAgency')->subdomain]) }}"
+                    href="{{ route('agency.login', ['subdomain' => app('currentAgency')->subdomain]) }}"
                     class="text-blue-600 hover:underline">Login</a>
             </p>
 

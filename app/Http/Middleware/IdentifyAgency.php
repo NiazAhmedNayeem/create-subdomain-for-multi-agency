@@ -5,35 +5,41 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Agency;
 
 class IdentifyAgency
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
     public function handle(Request $request, Closure $next): Response
     {
-        $host = $request->getHost(); // niaz.lvh.me
+        $host = $request->getHost(); // example: niaz.lvh.me
         $parts = explode('.', $host);
 
         if (count($parts) < 3) {
-            abort(404); // root domain blocked
+            abort(404, 'Root domain access blocked');
         }
 
         $subdomain = $parts[0];
 
-        $agency = \App\Models\Agency::where('subdomain', $subdomain)
-            // ->where('status', 'active')
-            ->first();
+        $agency = Agency::where('subdomain', $subdomain)->first();
 
         if (!$agency) {
-            abort(404);
+            abort(404, 'Agency not found');
         }
 
+        // attach agency to request
+        $request->attributes->set('agency', $agency);
+
+        // attach agency globally
         app()->instance('currentAgency', $agency);
+
+        // auth check and redirect
+        if (Auth::check() && Auth::user()->agency_id !== $agency->id) {
+            Auth::logout();
+            return redirect('/login')->with('error', 'Unauthorized access to this agency');
+        }
 
         return $next($request);
     }
+
 }

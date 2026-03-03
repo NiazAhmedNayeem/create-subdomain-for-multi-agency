@@ -15,9 +15,13 @@
         <aside class="w-64 bg-gray-900 text-white flex flex-col justify-between">
             <div class="p-6">
                 <!-- Agency Name -->
-                <h2 class="text-2xl font-bold mb-10">
+                <h2 class="text-2xl font-bold mb-2">
                     {{ request()->attributes->get('agency')->name ?? 'Agency' }}
                 </h2>
+
+                <p class="text-sm text-indigo-200 mb-10">
+                    Agency Panel
+                </p>
 
                 <!-- Menu -->
                 <nav>

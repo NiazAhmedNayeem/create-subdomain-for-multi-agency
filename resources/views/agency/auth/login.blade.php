@@ -5,12 +5,12 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="min-h-screen bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center">
+<body class="min-h-screen bg-gradient-to-br from-green-600 to-red-600 flex items-center justify-center">
 
     <div class="bg-white p-8 rounded-2xl shadow-2xl w-96">
 
         <h2 class="text-2xl font-bold text-center mb-6">
-            {{ app('currentAgency')->name }} Client Login
+            {{ app('currentAgency')->name }} Login
         </h2>
 
         @if (session('error'))
@@ -31,7 +31,7 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('client.login.store', ['subdomain' => app('currentAgency')->subdomain]) }}">
+        <form method="POST" action="{{ route('agency.login.store', ['subdomain' => app('currentAgency')->subdomain]) }}">
             @csrf
 
             <label class="text-sm font-medium text-gray-700">Email</label>
@@ -45,11 +45,6 @@
                 Login
             </button>
         </form>
-
-        <p class="text-center mt-4">
-            Don't have an account? <a href="{{ route('client.register', ['subdomain' => app('currentAgency')->subdomain]) }}"
-            class="text-blue-600 hover:underline">Register</a>
-        </p>
 
     </div>
 
