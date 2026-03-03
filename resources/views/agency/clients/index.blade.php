@@ -1,9 +1,10 @@
+{{-- resources/views/agency/clients.blade.php --}}
 @extends('agency.layout')
 
 @section('content')
 <div class="max-w-6xl mx-auto py-10">
 
-    <h1 class="text-3xl font-bold mb-6 text-gray-800">{{ app('currentAgency')->name }}'s Candidates</h1>
+    <h1 class="text-3xl font-bold mb-6 text-gray-800">{{ app('currentAgency')->name }}'s Clients</h1>
 
     @if(session('success'))
         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
@@ -23,13 +24,13 @@
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-                @foreach($candidates as $index => $candidate)
+                @foreach($clients as $index => $client)
                     <tr class="hover:bg-gray-50">
                         <td class="px-6 py-4 whitespace-nowrap">{{ $index + 1 }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ $candidate->name }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ $candidate->email }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $client->name }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $client->email }}</td>
                         {{-- <td class="px-6 py-4 whitespace-nowrap">
-                            @if($candidate->status == 'active')
+                            @if($client->status == 'active')
                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                     Active
                                 </span>
@@ -45,7 +46,7 @@
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
-                                    onclick="return confirm('Are you sure you want to delete this candidate?')">
+                                    onclick="return confirm('Are you sure you want to delete this client?')">
                                     Delete
                                 </button>
                             </form>
@@ -53,9 +54,9 @@
                     </tr>
                 @endforeach
 
-                @if($candidates->isEmpty())
+                @if($clients->isEmpty())
                     <tr>
-                        <td colspan="5" class="px-6 py-4 text-center text-gray-500">No candidates found.</td>
+                        <td colspan="5" class="px-6 py-4 text-center text-gray-500">No clients found.</td>
                     </tr>
                 @endif
             </tbody>

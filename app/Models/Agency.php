@@ -24,4 +24,8 @@ class Agency extends Model
     {
         return $this->hasMany(User::class)->where('role', 'candidate');
     }
+    public function clients()
+    {
+        return $this->hasMany(User::class)->where('role', 'client');
+    }
 }

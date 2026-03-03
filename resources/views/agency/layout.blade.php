@@ -34,12 +34,14 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="block px-4 py-2 rounded hover:bg-gray-700 transition">
+                            <a href="{{ route('agency.clients.index', ['subdomain' => request()->route('subdomain')]) }}"
+                                class="block px-4 py-2 rounded hover:bg-gray-700 transition">
                                 Clients
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('agency.candidates.index') }}" class="block px-4 py-2 rounded hover:bg-gray-700 transition">
+                            <a href="{{ route('agency.candidates.index', ['subdomain' => request()->route('subdomain')]) }}"
+                                class="block px-4 py-2 rounded hover:bg-gray-700 transition">
                                 Candidate
                             </a>
                         </li>
