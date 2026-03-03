@@ -2,12 +2,12 @@
 <html>
 
 <head>
-    <title>Client Register</title>
-   <script src="https://cdn.tailwindcss.com"></script>
+    <title>Candidate Register</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body
-    class="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-blue-500 flex items-center justify-center px-4">
+    class="min-h-screen bg-gradient-to-br from-green-600 via-red-600 to-blue-500 flex items-center justify-center px-4">
 
     <div class="w-full max-w-md">
 
@@ -21,7 +21,7 @@
                 </div>
 
                 <h2 class="text-2xl font-bold mt-4 text-gray-800">
-                    Client Registration
+                    Candidate Registration
                 </h2>
 
                 <p class="text-gray-500 text-sm mt-1">
@@ -49,7 +49,7 @@
 
             <!-- Form -->
             <form method="POST"
-                action="{{ route('client.register.store', ['subdomain' => app('currentAgency')->subdomain]) }}"
+                action="{{ route('candidate.register.store', ['subdomain' => app('currentAgency')->subdomain]) }}"
                 class="space-y-4">
                 @csrf
 
@@ -86,7 +86,7 @@
 
             <p class="text-center mt-4">
                 Already have an account? <a
-                    href="{{ route('client.login', ['subdomain' => app('currentAgency')->subdomain]) }}"
+                    href="{{ route('candidate.login', ['subdomain' => app('currentAgency')->subdomain]) }}"
                     class="text-blue-600 hover:underline">Login</a>
             </p>
 

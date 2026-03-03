@@ -3,8 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Agency Dashboard</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <title>Candidate Dashboard</title>
+     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body class="bg-gray-100">
@@ -12,47 +12,53 @@
     <div class="flex h-screen">
 
         <!-- Sidebar -->
-        <aside class="w-64 bg-gray-900 text-white flex flex-col justify-between">
+        <aside class="w-64 bg-green-700 text-white flex flex-col justify-between">
+
             <div class="p-6">
+
                 <!-- Agency Name -->
-                <h2 class="text-2xl font-bold mb-10">
-                    {{ request()->attributes->get('agency')->name ?? 'Agency' }}
+                <h2 class="text-2xl font-bold mb-2">
+                    {{ app('currentAgency')->name }}
                 </h2>
+
+                <p class="text-sm text-indigo-200 mb-10">
+                    Candidate Panel
+                </p>
 
                 <!-- Menu -->
                 <nav>
                     <ul class="space-y-4">
+
                         <li>
-                            <a href="{{ route('agency.dashboard') }}"
-                                class="block px-4 py-2 rounded hover:bg-gray-700 transition">
+                            <a href="{{ route('candidate.dashboard', ['subdomain' => app('currentAgency')->subdomain]) }}"
+                                class="block px-4 py-2 rounded hover:bg-indigo-600 transition">
                                 Dashboard
                             </a>
                         </li>
+
                         <li>
-                            <a href="#" class="block px-4 py-2 rounded hover:bg-gray-700 transition">
-                                Staff
+                            <a href="#" class="block px-4 py-2 rounded hover:bg-indigo-600 transition">
+                                My Profile
                             </a>
                         </li>
+
                         <li>
-                            <a href="#" class="block px-4 py-2 rounded hover:bg-gray-700 transition">
-                                Clients
+                            <a href="#" class="block px-4 py-2 rounded hover:bg-indigo-600 transition">
+                                My Jobs
                             </a>
                         </li>
+
                         <li>
-                            <a href="{{ route('agency.candidates.index') }}" class="block px-4 py-2 rounded hover:bg-gray-700 transition">
-                                Candidate
+                            <a href="#" class="block px-4 py-2 rounded hover:bg-indigo-600 transition">
+                                Billing
                             </a>
                         </li>
-                        <li>
-                            <a href="#" class="block px-4 py-2 rounded hover:bg-gray-700 transition">
-                                Revenue
-                            </a>
-                        </li>
+
                     </ul>
                 </nav>
             </div>
 
-            <!-- Logout Button -->
+            <!-- Logout -->
             <div class="p-6">
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
@@ -62,6 +68,7 @@
                     </button>
                 </form>
             </div>
+
         </aside>
 
         <!-- Main Content -->
