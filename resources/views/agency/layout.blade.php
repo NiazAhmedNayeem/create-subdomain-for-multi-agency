@@ -23,7 +23,7 @@
                 <nav>
                     <ul class="space-y-4">
                         <li>
-                            <a href="{{ route('agency.dashboard') }}"
+                            <a href="{{ route('agency.dashboard', ['subdomain' => request()->route('subdomain')]) }}"
                                 class="block px-4 py-2 rounded hover:bg-gray-700 transition">
                                 Dashboard
                             </a>
