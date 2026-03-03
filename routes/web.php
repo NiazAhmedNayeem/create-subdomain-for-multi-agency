@@ -54,15 +54,7 @@ Route::middleware(['auth', 'super_admin'])->prefix('admin')->group(function () {
 });
 
 
-Route::middleware(['auth', 'check.agency'])->prefix('agency')->group(function () {
 
-    Route::get('/dashboard', function () {
-
-        $agency = request()->attributes->get('agency');
-
-        return view('agency.dashboard', compact('agency'));
-    })->name('agency.dashboard');
-});
 
 
 
