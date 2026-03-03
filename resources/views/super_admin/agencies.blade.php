@@ -1,4 +1,4 @@
-@extends('admin.layout')
+@extends('super_admin.layout')
 
 @section('content')
 <div class="max-w-6xl mx-auto mt-8">

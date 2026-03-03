@@ -19,8 +19,6 @@ Route::domain('{subdomain}.lvh.me')->middleware(['identify.agency'])->group(func
     Route::middleware(['auth', 'role:agency_admin'])->prefix('agency')->group(function () {
 
         Route::get('/dashboard', [AgencyDashboardController::class, 'index'])->name('agency.dashboard');
-
-
         Route::get('clients', [AgencyClientController::class, 'index'])->name('agency.clients.index');
         Route::get('candidates', [AgencyCandidateController::class, 'index'])->name('agency.candidates.index');
     });

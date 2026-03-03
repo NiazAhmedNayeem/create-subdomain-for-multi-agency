@@ -10,7 +10,7 @@ class AgencyDashboardController extends Controller
     public function index()
     {
         $agency = request()->attributes->get('agency');
-        
-        return view('agency.dashboard', compact('agency'));
+
+        return view('agency.admin.dashboard', compact('agency'));
     }
 }

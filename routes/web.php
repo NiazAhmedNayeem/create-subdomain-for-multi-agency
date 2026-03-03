@@ -1,21 +1,19 @@
 <?php
 
-use App\Http\Controllers\AgencyController;
+use App\Http\Controllers\Frontend\FrontendController;
 use App\Http\Controllers\ProfileController;
-use App\Models\Agency;
-use App\Models\User;
+use App\Http\Controllers\SuperAdmin\AgencyController;
+use App\Http\Controllers\SuperAdmin\DashboardController;
 use Illuminate\Support\Facades\Route;
-use Stancl\Tenancy\Database\Models\Tenant;
-use Stancl\Tenancy\Database\Models\Domain;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Artisan;
 
 
 Route::domain('lvh.me')->group(function () {
 
-    Route::get('/', function () {
-        return view('welcome');
-    });
+    // Route::get('/', function () {
+    //     return view('welcome');
+    // });
+
+    Route::get('/', [FrontendController::class, 'index'])->name('home');
 
 
     Route::middleware('auth')->group(function () {
@@ -26,9 +24,7 @@ Route::domain('lvh.me')->group(function () {
 
     Route::middleware(['auth', 'super_admin'])->prefix('admin')->group(function () {
 
-        Route::get('/dashboard', function () {
-            return view('admin.dashboard');
-        })->name('admin.dashboard');
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
         ///Agency Management
         Route::get('/agencies', [AgencyController::class, 'index'])->name('admin.agencies');
@@ -37,20 +33,8 @@ Route::domain('lvh.me')->group(function () {
         Route::get('admin/agencies/{agency}/edit', [AgencyController::class, 'edit'])->name('admin.agencies.edit');
         Route::put('admin/agencies/{agency}', [AgencyController::class, 'update'])->name('admin.agencies.update');
         Route::delete('admin/agencies/{agency}', [AgencyController::class, 'destroy'])->name('admin.agencies.destroy');
-
-
-        Route::get('/agencies/check-subdomain', function (\Illuminate\Http\Request $request) {
-            $subdomain = strtolower($request->query('subdomain'));
-            $excludeId = $request->query('exclude_id');
-
-            $exists = \App\Models\Agency::where('subdomain', $subdomain)
-                ->when($excludeId, fn($q) => $q->where('id', '!=', $excludeId))
-                ->exists();
-
-            return response()->json([
-                'available' => !$exists
-            ]);
-        });
+        //Ajax subdomain check
+        Route::get('/agencies/check-subdomain', [AgencyController::class, 'subDomainCheck'])->name('admin.agencies.check-subdomain');
     });
 
     require __DIR__ . '/auth.php';

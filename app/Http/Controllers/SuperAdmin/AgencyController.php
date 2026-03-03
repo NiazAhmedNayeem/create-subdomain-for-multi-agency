@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\SuperAdmin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Agency;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -12,12 +13,12 @@ class AgencyController extends Controller
     public function index()
     {
         $agencies = Agency::with('admins')->get();
-        return view('admin.agencies', compact('agencies'));
+        return view('super_admin.agencies', compact('agencies'));
     }
 
     public function create()
     {
-        return view('admin.create-agency');
+        return view('super_admin.create-agency');
     }
 
     public function store(Request $request)
@@ -55,38 +56,52 @@ class AgencyController extends Controller
     public function edit(Agency $agency)
     {
         $admin = $agency->admins->first();
-        return view('admin.edit-agency', compact('agency', 'admin'));
+        return view('super_admin.edit-agency', compact('agency', 'admin'));
     }
 
     public function update(Request $request, Agency $agency)
-{
-    // Validate input
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'subdomain' => 'required|string|max:255|unique:agencies,subdomain,' . $agency->id,
-        'admin_email' => 'required|email|unique:users,email,' . optional($agency->admins->first())->id,
-        'admin_password' => 'nullable|string|min:6',
-    ]);
-
-    $agency->update([
-        'name' => $request->name,
-        'subdomain' => strtolower(str_replace(' ', '', $request->subdomain)),
-    ]);
-
-    $admin = $agency->admins->first();
-    if ($admin) {
-        $admin->update([
-            'email' => $request->admin_email,
-            'password' => $request->admin_password ? Hash::make($request->admin_password) : $admin->password,
+    {
+        // Validate input
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'subdomain' => 'required|string|max:255|unique:agencies,subdomain,' . $agency->id,
+            'admin_email' => 'required|email|unique:users,email,' . optional($agency->admins->first())->id,
+            'admin_password' => 'nullable|string|min:6',
         ]);
-    }
 
-    return redirect()->route('admin.agencies')->with('success', 'Agency updated successfully!');
-}
+        $agency->update([
+            'name' => $request->name,
+            'subdomain' => strtolower(str_replace(' ', '', $request->subdomain)),
+        ]);
+
+        $admin = $agency->admins->first();
+        if ($admin) {
+            $admin->update([
+                'email' => $request->admin_email,
+                'password' => $request->admin_password ? Hash::make($request->admin_password) : $admin->password,
+            ]);
+        }
+
+        return redirect()->route('admin.agencies')->with('success', 'Agency updated successfully!');
+    }
 
     public function destroy(Agency $agency)
     {
         $agency->delete();
         return redirect()->route('admin.agencies')->with('success', 'Agency deleted successfully!');
+    }
+
+    public function subDomainCheck(Request $request)
+    {
+        $subdomain = strtolower($request->query('subdomain'));
+        $excludeId = $request->query('exclude_id');
+
+        $exists = \App\Models\Agency::where('subdomain', $subdomain)
+            ->when($excludeId, fn($q) => $q->where('id', '!=', $excludeId))
+            ->exists();
+
+        return response()->json([
+            'available' => !$exists
+        ]);
     }
 }

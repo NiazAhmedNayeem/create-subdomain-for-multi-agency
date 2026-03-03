@@ -1,4 +1,4 @@
-@extends('admin.layout')
+@extends('super_admin.layout')
 
 @section('content')
     <div class="max-w-3xl mx-auto py-10">
